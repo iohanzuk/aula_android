@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FusoEuaActivity extends AppCompatActivity {
 
@@ -36,7 +37,24 @@ public class FusoEuaActivity extends AppCompatActivity {
     RadioGroup.OnCheckedChangeListener radioChangeOuvinte = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
-            int result = Integer.parseInt(hora.getText().toString());
+            String text = hora.getText().toString();
+            int result = 0;
+            if (text.isEmpty()) {
+                Toast.makeText(FusoEuaActivity.this, "É necessário informar um horário", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                 result = Integer.parseInt(hora.getText().toString());
+            } catch (Exception exception) {
+                Toast.makeText(FusoEuaActivity.this, "Somente números devem ser informados", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (result > 23 || result < 0) {
+                Toast.makeText(FusoEuaActivity.this, "Deve ser informado apenas inteiros de 0 A 23", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             switch (checkedId) {
                 case R.id.radioButton:
                     result = calculoGMT(Integer.parseInt(hora.getText().toString()), -3);
